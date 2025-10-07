@@ -1,87 +1,61 @@
 import UIKit
+#if canImport(CHTCollectionViewWaterfallLayout)
+import CHTCollectionViewWaterfallLayout
+#endif
 
-// MARK: - シンプルなレイアウトクラス
-class SimpleLayout: UICollectionViewLayout {
-    private var cache: [UICollectionViewLayoutAttributes] = []
-    private let itemSize = CGSize(width: 80, height: 80)
-    private let spacing: CGFloat = 10
+final class ViewController: UIViewController,
+                            UICollectionViewDataSource,
+                            CHTCollectionViewDelegateWaterfallLayout {
 
-    override func prepare() {
-        super.prepare()
-        guard let collectionView = collectionView else { return }
-
-        cache.removeAll()
-        var x: CGFloat = spacing
-        var y: CGFloat = spacing
-
-        let totalWidth = collectionView.bounds.width
-
-        for section in 0..<collectionView.numberOfSections {
-            for item in 0..<collectionView.numberOfItems(inSection: section) {
-                if x + itemSize.width + spacing > totalWidth {
-                    // 折り返し
-                    x = spacing
-                    y += itemSize.height + spacing
-                }
-
-                let indexPath = IndexPath(item: item, section: section)
-                let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-                attributes.frame = CGRect(x: x, y: y, width: itemSize.width, height: itemSize.height)
-                cache.append(attributes)
-
-                x += itemSize.width + spacing
-            }
-        }
-    }
-
-    override var collectionViewContentSize: CGSize {
-        guard let collectionView = collectionView else { return .zero }
-        let lastFrame = cache.last?.frame ?? .zero
-        return CGSize(width: collectionView.bounds.width, height: lastFrame.maxY + spacing)
-    }
-
-    override func layoutAttributesForElements(in rect: CGRect)
-        -> [UICollectionViewLayoutAttributes]? {
-        return cache.filter { $0.frame.intersects(rect) }
-    }
-
-    override func layoutAttributesForItem(at indexPath: IndexPath)
-        -> UICollectionViewLayoutAttributes? {
-        return cache.first { $0.indexPath == indexPath }
-    }
-}
-
-// MARK: - ViewController
-class ViewController: UIViewController, UICollectionViewDataSource {
     private var collectionView: UICollectionView!
+    private let itemHeights: [CGFloat] = [80, 120, 90, 160, 110]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
 
-        let layout = SimpleLayout()
+        // Waterfall レイアウト
+        let layout = CHTCollectionViewWaterfallLayout()
+        layout.columnCount = 2
+        layout.minimumColumnSpacing = 10
+        layout.minimumInteritemSpacing = 10
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+
+        // CollectionView
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         collectionView.backgroundColor = .white
-        collectionView.dataSource = self
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.alwaysBounceVertical = true
+        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
+        collectionView.dataSource = self
+        collectionView.delegate = self   // ✅ これだけでOK
+
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         view.addSubview(collectionView)
     }
 
     // MARK: - DataSource
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
+    func numberOfSections(in collectionView: UICollectionView) -> Int { 1 }
 
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        return 5
+        itemHeights.count
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
         cell.backgroundColor = .systemBlue
+        cell.layer.cornerRadius = 8
         return cell
+    }
+
+    // MARK: - Waterfall Delegate
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        // 幅は任意（比率だけ使用）
+        let height = itemHeights[indexPath.item]
+        return CGSize(width: 100, height: height)
     }
 }
