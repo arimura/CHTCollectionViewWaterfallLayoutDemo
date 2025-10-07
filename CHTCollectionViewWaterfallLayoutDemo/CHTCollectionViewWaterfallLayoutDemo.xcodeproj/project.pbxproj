@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		67D396A42E94B0C3009E15D9 /* CHTCollectionViewWaterfallLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 67D396A32E94B0C3009E15D9 /* CHTCollectionViewWaterfallLayout */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		67D396852E94B007009E15D9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67D396A42E94B0C3009E15D9 /* CHTCollectionViewWaterfallLayout in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +130,7 @@
 			);
 			name = CHTCollectionViewWaterfallLayoutDemo;
 			packageProductDependencies = (
+				67D396A32E94B0C3009E15D9 /* CHTCollectionViewWaterfallLayout */,
 			);
 			productName = CHTCollectionViewWaterfallLayoutDemo;
 			productReference = 67D3966E2E94B002009E15D9 /* CHTCollectionViewWaterfallLayoutDemo.app */;
@@ -208,6 +214,9 @@
 			);
 			mainGroup = 67D396652E94B002009E15D9;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				67D396A22E94B0C3009E15D9 /* XCRemoteSwiftPackageReference "CHTCollectionViewWaterfallLayout" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 67D3966F2E94B002009E15D9 /* Products */;
 			projectDirPath = "";
@@ -571,6 +580,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		67D396A22E94B0C3009E15D9 /* XCRemoteSwiftPackageReference "CHTCollectionViewWaterfallLayout" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/chiahsien/CHTCollectionViewWaterfallLayout";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.10;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		67D396A32E94B0C3009E15D9 /* CHTCollectionViewWaterfallLayout */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 67D396A22E94B0C3009E15D9 /* XCRemoteSwiftPackageReference "CHTCollectionViewWaterfallLayout" */;
+			productName = CHTCollectionViewWaterfallLayout;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 67D396662E94B002009E15D9 /* Project object */;
 }
